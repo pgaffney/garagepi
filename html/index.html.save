@@ -11,29 +11,24 @@
    <script type="text/javascript" src="/webiopi.js"></script>
    <script type="text/javascript">
         webiopi().ready(function() {
+            var content, button;
+            content = $("#content");
 
+            // we're using GPIO4 (bcm numbering)
             var DOOR1 = 4;
             var DOOR2 = 17;
 
             // make sure the GPIO is set to OUT in case it was changed from initial startup
-	    webiopi().setFunction(DOOR1, "OUT");
-	    webiopi().setFunction(DOOR2, "OUT");
+		    webiopi().setFunction(DOOR1, "OUT");
+		    webiopi().setFunction(DOOR2, "OUT");
 
-            // create button for DOOR1
-	        var button1 = webiopi().createButton("clickButton", "Door 1", function() {
-                webiopi().outputSequence(DOOR1, 1000, '01');
-            });	
+            // create a button which output a bit sequence on GPIO 7 with a 100ms period 
+            button = webiopi().createSequenceButton("clickButton", "Garage Door 1", DOOR1, 1000, '10');
+            content.append(button); // append button to content div
 
-            // append button to page
-            $("#controls").append(button1);
-
-            // create button for DOOR2
-	        var button2 = webiopi().createButton("clickButton", "Door 2", function() {
-                webiopi().outputSequence(DOOR2, 1000, '01');
-            });	
-
-            // append button to page
-            $("#controls").append(button2);
+            // create a button which output a bit sequence on GPIO 7 with a 100ms period 
+            button = webiopi().createSequenceButton("clickButton", "Garage Door 2", DOOR2, 1000, '10');
+            content.append(button); // append button to content div
 
             // auto refresh UI
             webiopi().refreshGPIO(true);
@@ -42,39 +37,22 @@
 
     </script>
     <style type="text/css">
-        button {
-            display: block;
-            margin: 5px 5px 5px 5px;
-            width: 160px;
-            height: 45px;
-            font-size: 24pt;
-            font-weight: bold;
-            color: black;
-        }
-
-        input[type="range"] {
-            display: block;
-            width: 160px;
-            height: 45px;
-        }
-
-        #gpio4.LOW {
-            background-color: White;
-        }
-
-        #gpio4.HIGH {
-            background-color: Red;
-
-        #gpio17.LOW {
-            background-color: White;
-        }
-
-        #gpio17.HIGH {
-            background-color: Red;
-        }
     </style>
 </head>
 <body id="background">
-    <div id="controls" align="center"></div>
+    <div id="content" align="center"></div>
 </body>
+
+
+
+
+<script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-46775909-2', 'github.com');
+    ga('send', 'pageview');
+</script>
 </html>
